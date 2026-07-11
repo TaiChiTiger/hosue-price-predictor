@@ -102,11 +102,11 @@ def main(args):
             run_id=mlflow.active_run().info.run_id
         )
 
-        # Transition model to "Staging"
-        client.transition_model_version_stage(
+        # Set "Staging" alias for the new model version
+        client.set_registered_model_alias(
             name=model_name,
-            version=model_version.version,
-            stage="Staging"
+            alias="Staging",
+            version=model_version.version
         )
 
         # Add a human-readable description
