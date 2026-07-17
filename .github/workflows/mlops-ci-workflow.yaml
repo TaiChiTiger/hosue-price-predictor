@@ -25,8 +25,8 @@ jobs:
 
       - name: Run Data Processing
         run: |
-          python src/data/run_preprocessing.py \
-          --input data/raw/house_dataset.csv \
+          python src/data/run_processing.py \
+          --input data/raw/house_data.csv \
           --output data/processed/cleaned_house_data.csv
 
       - name: Do Feature Engineering
@@ -56,6 +56,6 @@ jobs:
       - name: Clean up Mlflow
         if: always()                # FIX 8
         run: |
-          docker stop mlflow-server
-          docker rm mlflow-server
-          docker rmi ghcr.io/mlflow/mlflow:latest  # FIX 6
+          docker stop mlflow-server || true
+          docker rm mlflow-server || true
+          docker rmi ghcr.io/mlflow/mlflow:latest || true
