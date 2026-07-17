@@ -85,7 +85,19 @@ def main(args):
         mlflow.log_metrics({'mae': mae, 'r2': r2})
 
         # Log and register model
-        mlflow.sklearn.log_model(model, "tuned_model")
+        # skops_trusted_types: GradientBoostingRegressor uses internal sklearn types
+        # that skops treats as untrusted by default — we explicitly allowlist them here.
+        mlflow.sklearn.log_model(
+            model,
+            "tuned_model",
+            skops_trusted_types=[
+                "sklearn.ensemble._gb_losses.LeastSquaresError",
+                "sklearn.ensemble._gb_losses.RegressionLossFunction",
+                "sklearn.utils._bunch.Bunch",
+                "numpy.dtype",
+                "numpy.ndarray",
+            ],
+        )
         model_name = model_cfg['name']
         model_uri = f"runs:/{mlflow.active_run().info.run_id}/tuned_model"
 
